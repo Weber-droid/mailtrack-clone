@@ -30,7 +30,9 @@ export function MetricCards({ analytics }: MetricCardsProps) {
         <CardContent className="space-y-3">
           <div className="text-3xl font-bold">{analytics.open_rate.toFixed(1)}%</div>
           <Progress value={analytics.open_rate} />
-          <p className="text-xs text-muted-foreground">Unique opens across all campaigns</p>
+          <p className="text-xs text-muted-foreground">
+            Adjusted: {analytics.adjusted_open_rate.toFixed(1)}% (excl. bots)
+          </p>
         </CardContent>
       </Card>
 

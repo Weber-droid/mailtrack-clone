@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>SendBeacon</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>SendBeacon</h1>
+      <div id="logged-out">
+        <div class="tabs">
+          <button id="tab-login" class="active">Login</button>
+          <button id="tab-register">Register</button>
+        </div>
+        <form id="login-form">
+          <input id="login-email" type="email" placeholder="Email" required />
+          <input id="login-password" type="password" placeholder="Password" required />
+          <button type="submit">Sign in</button>
+        </form>
+        <form id="register-form" class="hidden">
+          <input id="reg-name" type="text" placeholder="Name" />
+          <input id="reg-email" type="email" placeholder="Email" required />
+          <input id="reg-password" type="password" placeholder="Password (min 8)" required minlength="8" />
+          <button type="submit">Create account</button>
+        </form>
+        <p id="error" class="error"></p>
+      </div>
+      <div id="logged-in" class="hidden">
+        <p>Signed in as <strong id="user-email"></strong></p>
+        <label>API URL<input id="api-url" type="text" value="http://localhost:8000" /></label>
+        <label><input id="notif-enabled" type="checkbox" checked /> Browser notifications</label>
+        <button id="save-settings">Save settings</button>
+        <button id="logout-btn">Logout</button>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

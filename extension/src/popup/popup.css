@@ -1,0 +1,80 @@
+body {
+  width: 320px;
+  margin: 0;
+  padding: 16px;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+}
+
+h1 {
+  font-size: 16px;
+  margin: 0 0 12px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1557b0;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.tabs button {
+  flex: 1;
+  background: #f1f3f4;
+  color: #333;
+}
+
+.tabs button.active {
+  background: #1a73e8;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+.error {
+  color: #d93025;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+}
+
+#logged-in p {
+  margin-bottom: 12px;
+}
+
+#logout-btn {
+  background: #5f6368;
+  margin-top: 8px;
+}

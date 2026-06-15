@@ -1,3 +1,5 @@
+import { getToken } from "@/lib/auth-storage";
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export class ApiError extends Error {
@@ -10,13 +12,30 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
+interface ApiFetchOptions extends RequestInit {
+  auth?: boolean;
+}
+
+export async function apiFetch<T>(
+  path: string,
+  options: ApiFetchOptions = {},
+): Promise<T> {
+  const { auth = true, ...fetchOptions } = options;
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(fetchOptions.headers as Record<string, string>),
+  };
+
+  if (auth) {
+    const token = getToken();
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+  }
+
   const response = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
+    ...fetchOptions,
+    headers,
   });
 
   if (!response.ok) {
@@ -34,5 +53,14 @@ export async function apiFetch<T>(path: string, options?: RequestInit): Promise<
     throw new ApiError(detail, response.status);
   }
 
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
   return response.json() as Promise<T>;
+}
+
+export function getAnalyticsExportUrl(): string {
+  const token = getToken();
+  return `${API_BASE}/api/analytics/export?token=${token ?? ""}`;
 }

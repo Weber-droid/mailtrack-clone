@@ -1,11 +1,19 @@
-# Mailtrack Clone
+# SendBeacon
 
 A self-hosted, production-ready **Email Tracking and Analytics Platform** built as a monorepo. It captures two high-signal engagement events with low latency:
 
 1. **Email Opens** — via a hidden 1×1 tracking pixel embedded in HTML email bodies
 2. **Link Clicks** — via masked redirect URLs that log the click before forwarding to the destination
 
-The stack is a **FastAPI** backend (REST + public tracking endpoints) and a **Next.js** frontend (campaign generator + live analytics dashboard). SQLite is used for local development; PostgreSQL is supported for production.
+The stack is a **FastAPI** backend (REST + public tracking endpoints), a **Next.js** frontend (marketing landing page, campaign generator, live analytics dashboard), and a **Gmail browser extension** (Chrome, Brave, Edge). Users sign up with email/password or Google OAuth. SQLite is used for local development; PostgreSQL is supported for production.
+
+### Quick start (authenticated)
+
+1. **Backend:** `cd backend && python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && PYTHONPATH=. uvicorn app.main:app --reload --port 8000`
+2. **Frontend:** `cd frontend && npm install && npm run dev`
+3. **Register** at [http://localhost:3000/register](http://localhost:3000/register)
+4. **Extension:** Load `extension/` unpacked in Brave/Chrome — see [extension/README.md](extension/README.md)
+5. **Gmail:** Compose and send — tracking is automatic via the extension
 
 ---
 
@@ -42,7 +50,18 @@ The stack is a **FastAPI** backend (REST + public tracking endpoints) and a **Ne
 | **Client intelligence** | User-Agent parsing (browser + OS) in the activity feed |
 | **Theming** | Light/dark mode with system preference support |
 | **Database flexibility** | SQLite for dev, PostgreSQL-compatible schema for prod |
-| **Container-ready** | Individual Dockerfiles + optional `docker-compose.yml` |
+| **Authentication** | Email/password + Google OAuth; JWT tokens; per-user data isolation |
+| **Gmail extension** | Auto-inject pixel, rewrite links, track toggles, sent-folder badges |
+| **Webhooks** | HMAC-signed POST on open/click events |
+| **Campaigns** | Bulk send to multiple recipients with A/B subject support |
+| **Templates** | Reusable email templates |
+| **API keys** | Programmatic access for ESP integrations |
+| **Teams** | Shared workspaces with admin/member roles |
+| **Admin panel** | User stats for admin accounts |
+| **GDPR tools** | Export and delete account data |
+| **Bot filtering** | Adjusted open rate excluding probable bots |
+| **Custom domain** | Per-user or global tracking URL domain |
+| **CSV export** | Download analytics events |
 
 ---
 
@@ -502,12 +521,15 @@ curl http://localhost:8000/api/analytics | python3 -m json.tool
 
 | Route | Component | Description |
 |-------|-----------|-------------|
-| `/` | `page.tsx` + `CampaignForm` + `SnippetDisplay` | Create campaigns and copy tracking snippets |
-| `/dashboard` | `dashboard/page.tsx` + `MetricCards` + `ActivityFeed` | View metrics and live event feed |
+| `/` | Marketing landing page | Public SendBeacon homepage with features, pricing, FAQ |
+| `/campaign` | `CampaignForm` + `SnippetDisplay` | Create campaigns and copy tracking snippets (auth required) |
+| `/dashboard` | `MetricCards` + `ActivityFeed` | View metrics and live event feed |
+| `/login`, `/register` | Auth forms | Sign in or create account |
+| `/settings`, `/campaigns`, `/admin` | App pages | Settings, campaign list, admin panel |
 
-### Campaign Generator (`/`)
+### Campaign Generator (`/campaign`)
 
-The home page provides a form with three fields:
+The campaign page provides a form with three fields:
 
 1. **Recipient Email** (required) — validated on both client and server
 2. **Subject Line** (optional)

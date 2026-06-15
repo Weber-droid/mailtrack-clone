@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "SendBeacon",
+  "version": "1.0.0",
+  "description": "Track email opens and link clicks in Gmail",
+  "permissions": ["storage", "identity", "notifications"],
+  "host_permissions": [
+    "https://mail.google.com/*",
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*"
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "SendBeacon"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["src/content/gmail.js"],
+      "css": ["src/content/gmail.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
